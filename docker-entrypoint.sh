@@ -1,4 +1,4 @@
-##!/bin/sh
+#!/bin/sh
 set -e
 
 # 1. Read Render's assigned port, default to 8080 if not set
