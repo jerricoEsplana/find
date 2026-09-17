@@ -6,7 +6,7 @@ PORT="${PORT:-8080}"
 
 # 2. Update Apache port configurations dynamically
 sed -i "s/^Listen .*/Listen ${PORT}/" /etc/apache2/ports.conf
-sed -i "s/:80>/:${PORT}>/g" /etc/apache2/sites-available/000-default.conf
+sed -i "s/:80>/:${PORT}>/g" /etc/apache2/sites-available/000-default.conf 
 
 # 3. Handle your SQLite persistent storage directories
 mkdir -p "$(dirname "${SQLITE_DB_PATH:-/data/findit.sqlite}")" "${UPLOAD_PATH:-/data/uploads}"
