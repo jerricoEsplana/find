@@ -1,0 +1,8 @@
+<?php
+require 'config.php'; require_login(); $pageTitle='Settings'; $error='';
+if($_SERVER['REQUEST_METHOD']==='POST'){verify_csrf();$current=$_POST['current_password']??'';$new=$_POST['new_password']??'';$confirm=$_POST['confirm_password']??'';$stmt=$pdo->prepare("SELECT password_hash FROM users WHERE id=?");$stmt->execute([current_user()['id']]);$hash=$stmt->fetchColumn();if(!password_verify($current,$hash))$error='Current password is incorrect.';elseif(strlen($new)<8)$error='New password must be at least 8 characters.';elseif($new!==$confirm)$error='New passwords do not match.';else{$pdo->prepare("UPDATE users SET password_hash=?,updated_at=? WHERE id=?")->execute([password_hash($new,PASSWORD_DEFAULT),now(),current_user()['id']]);flash('success','Password changed successfully.');redirect('settings.php');}}
+require 'includes/header.php';
+?>
+<div class="container page-head"><span class="eyebrow">Account</span><h1>Settings</h1><p>Security and account preferences.</p></div>
+<div class="container narrow form-card"><?php if($error): ?><div class="flash error"><?= h($error) ?></div><?php endif; ?><h2>Change Password</h2><form method="post" class="form"><input type="hidden" name="csrf" value="<?= h(csrf_token()) ?>"><label>Current Password<input type="password" name="current_password" required></label><label>New Password<input type="password" name="new_password" minlength="8" required></label><label>Confirm New Password<input type="password" name="confirm_password" minlength="8" required></label><button class="btn primary">Change Password</button></form></div>
+<?php require 'includes/footer.php'; ?>
