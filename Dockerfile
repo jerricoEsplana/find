@@ -1,7 +1,9 @@
 FROM php:8.3-apache
 
-RUN docker-php-ext-install pdo_sqlite \
-    && a2enmod rewrite
+#RUN docker-php-ext-install pdo_sqlite \
+#    && a2enmod rewrite
+RUN a2enmod rewrite
+
 
 WORKDIR /var/www/html
 COPY . /var/www/html/
